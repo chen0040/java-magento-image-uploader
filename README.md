@@ -5,7 +5,11 @@ Java utility tool which allows user to upload images for each product into a mag
 # Install
 
 ```xml
-
+<dependency>
+  <groupId>com.github.chen0040</groupId>
+  <artifactId>java-magento-image-uploader</artifactId>
+  <version>1.0.1</version>
+</dependency>
 ```
 
 # Usage
@@ -23,12 +27,13 @@ if(token != null && !token.equals("")) {
  int pageIndex = 0;
  int pageSize = 10;
  ProductPage page = uploader.page(pageIndex, pageSize);
+ boolean overwrite = true;
  uploader.uploadJpeg(page, product -> {
     long productId = product.getId();
     long imageId = (productId % 6 + 1);
     String imageName = "/tmp/images/" + imageId + ".jpg";
     return Arrays.asList(imageName);
- }, false);
+ }, overwrite);
 }
 ```
 
@@ -42,8 +47,14 @@ its product id is used to retrieve the image file stored locally in the /tmp/ima
 * /tmp/images/5.jpg
 * /tmp/images/6.jpg
 
-The mapping between each product and each page is done by (product) -> (product.productId % 6 + 1).jpg
+The mapping between each product and each page is done by (product) -> (product.productId % 6 + 1).jpg. Note that it is feasible to
+upload multiple images for each product (as evidenced by the line 'Arrays.asList...' in the above code).
+
+The 'overwrite' flag if set to true will delete all images originally associated with the product before upload the new images for the product. 
+If set to false, it will not upload any images if there already been images associated with the product.
+ 
 
 To upload png images, use uploadPng(...) instead of uploadJpeg(...)
+
 
 
