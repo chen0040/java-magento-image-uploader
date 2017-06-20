@@ -497,6 +497,11 @@
             <version>${lombok.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.chen0040</groupId>
+            <artifactId>java-magento-client</artifactId>
+            <version>1.0.2</version>
+        </dependency>
 
 
     </dependencies>
