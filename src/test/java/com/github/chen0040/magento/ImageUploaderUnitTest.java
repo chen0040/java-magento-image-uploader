@@ -36,7 +36,7 @@ public class ImageUploaderUnitTest {
       ImageUploader uploader = new ImageUploader(Mediator.url);
       String token = uploader.loginAsAdmin(Mediator.adminUsername, Mediator.adminPassword);
 
-      if(token != null && !token.equals("")) {
+      if(!StringUtils.isEmpty(token)) {
          ProductPage page = uploader.page(0, 10);
          uploader.uploadJpeg(page, product -> {
             long productId = product.getId();

@@ -8,7 +8,7 @@ Java utility tool which allows user to upload images for each product into a mag
 <dependency>
   <groupId>com.github.chen0040</groupId>
   <artifactId>java-magento-image-uploader</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 </dependency>
 ```
 

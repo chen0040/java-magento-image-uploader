@@ -6,7 +6,7 @@
 
     <groupId>com.github.chen0040</groupId>
     <artifactId>java-magento-image-uploader</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 
 
 
@@ -500,7 +500,7 @@
         <dependency>
             <groupId>com.github.chen0040</groupId>
             <artifactId>java-magento-client</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </dependency>
 
 
