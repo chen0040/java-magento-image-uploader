@@ -37,7 +37,9 @@ if(token != null && !token.equals("")) {
 }
 ```
 
-The code first login to magento using the admin account, it then obtain the first 10 products from the Magento site, for each product
+The code first login to Magento site using the admin account (to login as a client, call uploader.loginAsClient(...) instead). 
+
+Next, it then obtain the first 10 products from the Magento site, for each product
 its product id is used to retrieve the image file stored locally in the /tmp/images folder. The /tmp/images folder has the following images
 
 * /tmp/images/1.jpg
