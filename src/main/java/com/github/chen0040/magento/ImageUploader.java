@@ -24,6 +24,10 @@ public class ImageUploader {
       this.client = client;
    }
 
+   public ImageUploader(String url){
+      this.client = new MagentoClient(url);
+   }
+
    public String loginAsAdmin(String username, String password){
       return this.client.loginAsAdmin(username, password);
    }
@@ -36,7 +40,15 @@ public class ImageUploader {
       return this.client.products().page(pageIndex, pageSize);
    }
 
-   public void uploadPng(ProductPage page, Function<Product, List<String>> imageNameFunc, boolean forceOverwrite) throws IOException {
+   public void uploadJpeg(ProductPage page, Function<Product, List<String>> imageNameFunc, boolean forceOverwrite) {
+      uploadImage(page, imageNameFunc, forceOverwrite, ImageType.Jpeg);
+   }
+
+   public void uploadPng(ProductPage page, Function<Product, List<String>> imageNameFunc, boolean forceOverwrite){
+      uploadImage(page, imageNameFunc, forceOverwrite, ImageType.Png);
+   }
+
+   public void uploadImage(ProductPage page, Function<Product, List<String>> imageNameFunc, boolean forceOverwrite, ImageType imageType) {
       List<Product> products = page.getItems();
 
       for(int i=0; i < products.size(); ++i){
@@ -63,21 +75,37 @@ public class ImageUploader {
             int position = 1;
             String type = "image/png";
 
-            String imageFileName = images.get(j); //"new_image.png";
-
-            InputStream inputStream = new FileInputStream(imageFileName);
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            int length;
-            byte[] bytes = new byte[1024];
-            while((length = inputStream.read(bytes, 0, 1024)) > 0) {
-               baos.write(bytes, 0, length);
+            if(imageType == ImageType.Jpeg) {
+               type = "image/jpeg";
             }
-            bytes = baos.toByteArray();
 
-            long uploadedId = client.media().uploadProductImage(sku, position, filename, bytes, type, imageFileName);
+            String imageFilePath = images.get(j); //"new_image.png";
+            String imageName = imageFilePath;
+            if(imageFilePath.contains(File.separator)) {
+               imageName = imageFilePath.substring(imageFilePath.lastIndexOf(File.separator) + 1, imageFilePath.length());
+            }
 
-            logger.info("uploaded {} for product {}: {}", imageFileName, sku, uploadedId);
+            if(imageFilePath.contains("/")) {
+               imageName = imageFilePath.substring(imageFilePath.lastIndexOf("/") + 1, imageFilePath.length());
+            }
+
+            try {
+               InputStream inputStream = new FileInputStream(imageFilePath);
+
+               ByteArrayOutputStream baos = new ByteArrayOutputStream();
+               int length;
+               byte[] bytes = new byte[1024];
+               while ((length = inputStream.read(bytes, 0, 1024)) > 0) {
+                  baos.write(bytes, 0, length);
+               }
+               bytes = baos.toByteArray();
+
+               long uploadedId = client.media().uploadProductImage(sku, position, filename, bytes, type, imageName);
+
+               logger.info("uploaded {} for product {}: {}", imageFilePath, sku, uploadedId);
+            }catch(IOException exception){
+               logger.error("Failed to upload as image " + imageFilePath + " is not available.", exception);
+            }
          }
       }
    }
